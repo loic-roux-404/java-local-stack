@@ -1,0 +1,14 @@
+{
+    "search.exclude": {
+        "**/node_modules/@*": true,
+        "**/node_modules/{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,ta,tb,tc,td,te,tf,tg,th,tin,tim,tj,tk,tl,tm,tn,to,tp,tq,tr,ts,tt,tu,tv,tw,ty,tx,tz,u,v,w,x,y,z}*": true,
+        "dist/": true,
+        "**/.venv": true,
+        "**/dist": true,
+        "*.log": true,
+        "*-lock.json": true
+    },
+    "search.useIgnoreFiles": false,
+    "editor.fontLigatures": true,
+    "terminal.integrated.defaultProfile.linux": "bash"
+}

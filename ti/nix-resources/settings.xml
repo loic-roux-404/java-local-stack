@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<settings
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd"
+    xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <interactiveMode>false</interactiveMode>
+
+    <localRepository>${user.home}/.m2/repository</localRepository>
+    <servers>
+        <server>
+            <id>pictet-release-repo</id>
+            <username>${env.NEXUS_USER}</username>
+            <password>${env.NEXUS_TOKEN}</password>
+            <configuration>
+                <!-- Optimize authentication time when downloading.
+                        Find out more:
+                http://maven.apache.org/guides/mini/guide-http-settings.html#Example:_Using_Preemptive_Authentication -->
+                <wagonProvider>httpclient</wagonProvider>
+                <httpConfiguration>
+                    <all>
+                        <usePreemptive>true</usePreemptive>
+                    </all>
+                </httpConfiguration>
+            </configuration>
+        </server>
+        <server>
+            <id>pictet-snapshot-repo</id>
+            <username>${env.NEXUS_USER}</username>
+            <password>${env.NEXUS_TOKEN}</password>
+            <configuration>
+                <wagonProvider>httpclient</wagonProvider>
+                <httpConfiguration>
+                    <all>
+                        <usePreemptive>true</usePreemptive>
+                    </all>
+                </httpConfiguration>
+            </configuration>
+        </server>
+    </servers>
+
+    <mirrors>
+        <mirror>
+            <mirrorOf>*,!other-group</mirrorOf>
+            <url>https://artifactory.pictet.com/repository/data-group</url>
+            <id>pictet-release-repo</id>
+        </mirror>
+        <mirror>
+            <mirrorOf>*,!data-group</mirrorOf>
+            <url>https://artifactory.pictet.com/repository/cats-ti-maven-group</url>
+            <id>pictet-snapshot-repo</id>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+        <profile>
+            <repositories>
+
+                <repository>
+                    <id>data-group</id>
+                    <url>https://artifactory.pictet.com/repository/data-group</url>
+                </repository>
+                <repository>
+                    <id>sg-mail-maven-group</id>
+                    <url>https://artifactory.pictet.com/repository/sg-mail-maven-group</url>
+                </repository>
+                <repository>
+                    <id>cats-ti-maven-group</id>
+                    <url>https://artifactory.pictet.com/repository/cats-ti-maven-group</url>
+                </repository>
+                <repository>
+                    <id>lbp-ti-maven-group</id>
+                    <url>https://artifactory.pictet.com/repository/lbp-ti-maven-group</url>
+                </repository>
+                <repository>
+                    <id>lcl-ti-maven-group</id>
+                    <url>https://artifactory.pictet.com/repository/lcl-ti-maven-group</url>
+                </repository>
+                <repository>
+                    <id>mutu-pci-ti-maven-group</id>
+                    <url>https://artifactory.pictet.com/repository/mutu-pci-ti-maven-group</url>
+                </repository>
+
+                <repository>
+                    <releases />
+                    <snapshots />
+                    <!-- Find out more: https://help.sonatype.com/repomanager3/formats/maven-repositories -->
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                </repository>
+
+                <repository>
+                    <id>shibboleth-releases</id>
+                    <url>https://build.shibboleth.net/nexus/content/repositories/releases/</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <releases />
+                    <snapshots />
+                    <!-- Find out more:
+                                        https://help.sonatype.com/repomanager3/formats/maven-repositories -->
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                </pluginRepository>
+            </pluginRepositories>
+            <id>kazan-nexus</id>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>kazan-nexus</activeProfile>
+    </activeProfiles>
+</settings>

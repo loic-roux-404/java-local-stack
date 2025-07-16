@@ -1,0 +1,173 @@
+{
+    "database": {
+        "1704374859167": {
+            "host": "127.0.0.1",
+            "port": 3306,
+            "user": "root",
+            "password": "dbclient_a$sVxzmj6kjnnTGyD5FD5YrA==",
+            "dbType": "MySQL",
+            "name": "LOCAL MySQL",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": false,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 11,
+            "useSSL": false,
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none"
+            },
+            "key": "1704374859167",
+            "connectionKey": "database.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        }
+    },
+    "$schema": "https://cdn.database-client.com/dbclient/schema.json",
+    "nosql": {
+        "1702471456450": {
+            "host": "http://127.0.0.1:9200",
+            "port": 9200,
+            "dbType": "ElasticSearch",
+            "name": "LOCAL ElasticSearch",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": false,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 11,
+            "useSSL": false,
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none",
+                "url": "http://127.0.0.1:9200"
+            },
+            "elasticSearch": {
+                "authType": "none"
+            },
+            "key": "1702471456450",
+            "connectionKey": "nosql.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        },
+        "1700055933696": {
+            "host": "127.0.0.1",
+            "port": 9092,
+            "dbType": "Kafka",
+            "name": "LOCAL kafka",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": false,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 2,
+            "useSSL": false,
+            "kafkaAuth": "none",
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none"
+            },
+            "key": "1700055933696",
+            "connectionKey": "nosql.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        },
+        "1704884335064": {
+            "host": "127.0.0.1",
+            "port": 9900,
+            "user": "root",
+            "dbType": "S3",
+            "name": "LOCAL S3",
+            "advance": {
+                "hideSystemSchema": true,
+                "groupingTables": false,
+                "safeUpdateMode": false,
+                "showForeignKey": false
+            },
+            "treeFeatures": [],
+            "timezone": "+00:00",
+            "usingSSH": false,
+            "useSocksProxy": false,
+            "useHTTPProxy": false,
+            "athena": {},
+            "bigQuery": {},
+            "global": false,
+            "savePassword": "Forever",
+            "readonly": false,
+            "sort": 4,
+            "useSSL": false,
+            "fs": {
+                "encoding": "utf8",
+                "showHidden": true
+            },
+            "s3": {
+                "accessKey": "testClientKey",
+                "accessSecret": "testClientSecret",
+                "pathStyle": true,
+                "region": "",
+                "serviceIds": [
+                    "openSource",
+                    "minio"
+                ],
+                "useSSL": false,
+                "includeBuckets": "bucketname"
+            },
+            "dm": {
+                "usingServiceName": false
+            },
+            "httpAuth": {
+                "authType": "none"
+            },
+            "key": "1704884335064",
+            "connectionKey": "nosql.connections",
+            "isJdbc": false,
+            "requiredAuth": true
+        }
+    }
+}

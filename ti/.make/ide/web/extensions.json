@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "phanitejakomaravolu.EmberES6Snippets",
+        "EditorConfig.EditorConfig",
+        "redhat.vscode-yaml",
+        "lifeart.vscode-ember-unstable",
+        "pinage404.nix-extension-pack"
+    ]
+}

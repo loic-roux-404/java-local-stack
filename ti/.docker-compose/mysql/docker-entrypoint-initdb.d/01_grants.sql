@@ -1,0 +1,68 @@
+-- Automated Generation
+GRANT SUPER ON *.* TO 'ti'@'%';
+
+-- Database Creation with uniform DDL
+CREATE DATABASE IF NOT EXISTS `ti-actors` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-admin` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-authentication` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-campaign` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-customer` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-eventhandle` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-eventhandler` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-notification` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-reply` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-conversation` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-reporting` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-routing` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-settings` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-provisioning` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-project` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-batch` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-sg-batch` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-sg-keysecure` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-sg-owi` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ti-statistics` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-actors` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-authentication` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-bal-event` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-conversations` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-interlocutors` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-notification` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-reporting` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-routing` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `ticust-statistics` DEFAULT CHARACTER SET utf8;
+
+-- Grant permissions
+GRANT ALL PRIVILEGES ON `ti-actors`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-admin`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-authentication`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-campaign`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-customer`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-eventhandle`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-eventhandler`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-notification`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-reply`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-conversation`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-reporting`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-routing`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-settings`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-batch`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-sg-batch`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-sg-keysecure`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-sg-owi`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-statistics`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-migration`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-provisioning`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ti-project`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-actors`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-authentication`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-bal-event`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-conversations`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-interlocutors`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-notification`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-reporting`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-routing`.* TO 'ti'@'%';
+GRANT ALL PRIVILEGES ON `ticust-statistics`.* TO 'ti'@'%';
+
+-- Apply permission changes immediately
+FLUSH PRIVILEGES;

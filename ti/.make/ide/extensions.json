@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "EditorConfig.EditorConfig",
+        "vscjava.vscode-java-pack",
+        "shengchen.vscode-checkstyle",
+        "vmware.vscode-spring-boot",
+        "redhat.vscode-yaml",
+        "cweijan.vscode-database-client2",
+        "cweijan.dbclient-jdbc",
+        "SonarSource.sonarlint-vscode",
+        "vscjava.vscode-lombok"
+    ]
+}

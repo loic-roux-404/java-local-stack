@@ -1,0 +1,52 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:%SERVICE_PORT%",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "%module_prefix%/*": "${workspaceFolder}/app/*"
+      }
+    },
+    {
+      "name": "Launch Chromium",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:%SERVICE_PORT%",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "C:\\Program Files\\Chromium\\Application\\chrome.exe",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ],
+      "sourceMapPathOverrides": {
+        "%module_prefix%/*": "${workspaceFolder}/app/*"
+      }
+    },
+    {
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "edge",
+      "url": "http://localhost:%SERVICE_PORT%",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "%module_prefix%/*": "${workspaceFolder}/app/*"
+      }
+    },
+    {
+      "name": "Attach Chrome",
+      "infos": "google-chrome-stable --remote-debugging-port=9223",
+      "request": "attach",
+      "type": "chrome",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "ti-cats-web-application/*": "${workspaceFolder}/app/*"
+      }
+    }
+  ]
+}

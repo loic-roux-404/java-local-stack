@@ -1,0 +1,166 @@
+services:
+  jitserver:
+    container_name: jitserver
+    image: debian:bookworm-20240311-slim
+    command: /opt/java/openjdk/bin/jitserver
+    volumes:
+      - /nix/store:/nix/store:ro
+      - $JAVA_HOME:/opt/java/openjdk
+    ports:
+      - '38400:38400'
+    profiles: [jitserver]
+
+  kafka:
+    container_name: kafka
+    image: 'docker.io/bitnami/kafka:3.2.3'
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+    volumes:
+      - 'kafka_data:/bitnami'
+      - $HOME/.cache/javasharedresources:/.cache/javasharedresources
+      - /nix/store:/nix/store:ro
+    environment:
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_KRAFT_CLUSTER_ID: m1Ze6AjGRwqarkcxJscgyQ
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:${KAFKA_DEFAULT_BROKER_PORT:-9092}
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:${KAFKA_DEFAULT_BROKER_PORT:-9092},CONTROLLER://:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+      KAFKA_JVM_PERFORMANCE_OPTS: -Xms256m -Xmx256m -XX:MaxMetaspaceSize=64m ${OPENJ9_ARGS:-}
+      JAVA_HOME: $JAVA_HOME
+      TZ: Europe/Paris
+    healthcheck:
+      test: nc -z localhost 9092 || exit -1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    profiles: [all, kafka]
+
+  mysql:
+    container_name: mysql
+    image: mysql:${MYSQL_VERSION:-5.7}
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_null
+      MYSQL_USER: ${MYSQL_USER:-ti}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    user: "1000:1000"
+    volumes:
+      - ./.docker-compose/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:rwx
+      - ./.docker-compose/mysql/etc/mysql/conf.d/${MYSQL_CNF:-my-57.cnf}:/etc/mysql/conf.d/my.cnf:rw
+      - mysql_data:/var/lib/mysql
+    profiles: [all, mysql]
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.io/bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-7.17.23}
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+      - $JAVA_HOME:/opt/bitnami/java
+      - $HOME/.cache/javasharedresources:/.cache/javasharedresources
+      - /nix/store:/nix/store:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
+      ELASTICSEARCH_ENABLE_SECURITY: false
+      DB_TLS_USE_PEM: false
+      ES_JAVA_OPTS : '${PROXY_ARGS:-} -Xms256m -Xmx256m -XX:MaxMetaspaceSize=64m -XX:Compatibility=Elasticsearch ${OPENJ9_ARGS:-} -XX:-EnableCRIUSupport -Dsun.rmi.transport.tcp.maxConnectionThreads=0'
+      ES_JAVA_HOME: $JAVA_HOME
+      TZ: Europe/Paris
+      JMXDISABLE: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 40s
+      timeout: 10s
+      retries: 16
+    profiles: [all, elasticsearch]
+
+  elasticsearch-seed:
+    container_name: elasticsearch-seed
+    image: badouralix/curl-jq
+    user: "1000:0"
+    volumes:
+      - ./.docker-compose/elasticsearch-seed:/run
+      - ./${CONVERSATION_REPO_PREFIX:-.share/conversation}/src/main/resources/elasticsearch:/data/conversation
+      - ./${CUST_CONVERSATION_REPO_PREFIX:-.share/cust-conversation}/src/main/resources/elasticsearch:/data/cust-conversation
+      - ./${DEMAND_REPO_PREFIX:-.share/demand}/src/main/resources/elasticsearch:/data/demand
+      - ./${ARCHIVING_REPO_PREFIX:-.share/archiving}/src/main/resources/elasticsearch:/data/archiving
+      - ./${STATS_REPO_PREFIX:-.share/statistics}/src/main/resources/elasticsearch:/data/statistics
+      - ./${AUDIT_REPO_PREFIX:-.share/audit}/src/main/resources/elasticsearch:/data/audit
+    command: /run/init.sh
+    environment:
+      COMPANIES: ${COMPANIES:-}
+      ELASTICSEARCH_TEMPLATE_CREATE_ROUTE: ${ELASTICSEARCH_TEMPLATE_CREATE_ROUTE:-_template}
+      ELASTICSEARCH_CONVERSATION_TPL: ${ELASTICSEARCH_CONVERSATION_TPL:-/data/conversation/conversation-template.json}
+      ELASTICSEARCH_CUST_CONVERSATION_TPL: ${ELASTICSEARCH_CUST_CONVERSATION_TPL:-/data/cust-conversation/conversation-template.json}
+      ELASTICSEARCH_DEMAND_TPL: ${ELASTICSEARCH_DEMAND_TPL:-/data/demand/demand-template.json}
+      ELASTICSEARCH_AUDIT_TPL: ${ELASTICSEARCH_AUDIT_TPL:-/data/audit/audit-template.json}
+      ELASTICSEARCH_EVENT_TPL: ${ELASTICSEARCH_EVENT_TPL:-/data/statistics/event-template.json}
+      ELASTICSEARCH_ARCHIVING_TPL: ${ELASTICSEARCH_ARCHIVING_TPL:-/data/archiving/archives-template.json}
+      ELASTICSEARCH_URL: ${ELASTICSEARCH_URL:-http://elasticsearch:9200}
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    profiles: [all, elasticsearch]
+
+  minio:
+    container_name: minio
+    image: "minio/minio:${MINIO_TAG:-RELEASE.2024-07-10T18-41-49Z}"
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-testAppkey}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-testAppsecret}
+      MINIO_ROOT_USER: adminClientUser
+      MINIO_ROOT_PASSWORD: adminClientPassword
+      MINIO_BROWSER: off
+      MINIO_BROWSER_REDIRECT: false
+    volumes:
+      - minio_data:/data
+    command: [ server, /data ]
+    profiles: [all, minio]
+    ports:
+      - "9900:9000"
+    healthcheck:
+      test: ["CMD", mc, ping, local, --count, '1', --exit]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+
+  minio-seed:
+    container_name: minio-seed
+    image: "minio/minio:${MINIO_TAG:-RELEASE.2024-07-10T18-41-49Z}"
+    user: "1000:1000"
+    volumes:
+      - ./.docker-compose/minio:/run
+    environment:
+      COMPANIES: ${COMPANIES:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-testAppkey}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-testAppsecret}
+      MINIO_ROOT_USER: adminClientUser
+      MINIO_ROOT_PASSWORD: adminClientPassword
+      S3_BUCKET_PREFIX: ${S3_BUCKET_PREFIX}
+      AWS_API_VERSION: ${AWS_API_VERSION:-S3v4}
+    depends_on:
+      minio:
+        condition: service_healthy
+    profiles: [all, minio]
+    entrypoint: /run/s3-init.sh
+
+volumes:
+  mysql_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  kafka_data:
+    driver: local
+  minio_data:
+    driver: local

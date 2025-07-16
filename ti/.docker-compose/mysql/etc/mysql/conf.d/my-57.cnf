@@ -1,0 +1,7 @@
+[mysqld]
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+innodb_flush_neighbors=0
+innodb_large_prefix=true
+innodb_file_per_table=true
+default_storage_engine='InnoDB'
+skip_ssl

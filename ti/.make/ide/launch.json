@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-StartBoot<%service%>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "%MAIN_CLASS%",
+            "projectName": "%service%",
+            "vmArgs": "%SPRING_ARGS%",
+            "envFile": "%PWD%/.env"
+        },
+        {
+            "type": "java",
+            "name": "Attach-Spring Boot-StartBoot<%service%>",
+            "request": "attach",
+            "port": "1%SERVICE_PORT%",
+            "projectName": "%service%",
+            "hostName": "localhost"
+        },
+        {
+            "type": "java",
+            "name": "Attach Maven Test<%service%>",
+            "request": "attach",
+            "port": "2%SERVICE_PORT%",
+            "projectName": "%service%",
+            "hostName": "localhost"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="%service%" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ALTERNATIVE_JRE_PATH" value="%ALTERNATIVE_JRE_PATH%" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <module name="%service%" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.ewl.fpl.ti.parent.service.StartBoot" />
+    <option name="VM_PARAMETERS" value="%SPRING_ARGS%" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/../.env" />
+    </option>
+    <selectedOptions>
+     <option name="environmentVariables" />
+    </selectedOptions>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

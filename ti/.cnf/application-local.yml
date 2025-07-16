@@ -1,0 +1,60 @@
+elasticsearch.url: http://localhost:9200
+
+spring.data.cassandra:
+  contact-points: localhost
+  port: 9042
+  username: cassandra
+  password: cassandra
+  local-datacenter: datacenter1
+
+spring.cassandra:
+  contact-points: localhost
+  port: 9042
+  username: cassandra
+  password: cassandra
+  local-datacenter: datacenter1
+
+spring.cloud.stream.kafka.binder:
+  brokers: 127.0.01
+  defaultBrokerPort: 9092
+
+amazon:
+  s3:
+    client:
+      endpoint: http://localhost:9900
+      companyConfigurations:
+        default:
+          bucket: worldline
+          credentials:
+            AWSAccessKeyId: testClientKey
+            AWSSecretKey: testClientSecret
+        'worldline':
+          bucket: worldline
+          credentials:
+            AWSAccessKeyId: testClientKey
+            AWSSecretKey: testClientSecret
+
+  folder:
+    temporary: tmp
+    attachments:
+      ti-service-conversation: conversation
+      ti-service-routing: conversation
+      ti-service-notification: notification
+
+# Enforce this settings that could be loaded too late by spring startup and so evaluated as null
+spring.datasource:
+  url: jdbc:mysql://${ti.mysql.server}/${application.mysql.schema:db_null}?serverTimezone=${ti.mysql.serverTimezone}&allowPublicKeyRetrieval=true&useSSL=false
+
+spring:
+  liquibase:
+    user: ${ti.mysql.user}
+    password: ${ti.mysql.password}
+    url: jdbc:mysql://${ti.mysql.server}/${application.mysql.schema:db_null}?serverTimezone=${ti.mysql.serverTimezone}&allowPublicKeyRetrieval=true&useSSL=false
+
+spring.cloud.stream.kafka.binder.configuration:
+  sasl.mechanism: GSSAPI
+  security.protocol: "PLAINTEXT"
+  sasl.jaas.config:
+  ssl.keystore.location: ${user.home}/keystore.jks
+  ssl.truststore.location: ${user.home}/keystore.jks
+
