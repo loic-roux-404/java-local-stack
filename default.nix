@@ -1,6 +1,6 @@
 { pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/refs/tags/24.05.tar.gz") {} }: {
   base = import ./nix-base/shell.nix { inherit pkgs; };
-  ti = import ./ti/default.nix { inherit pkgs; };
+  stack = import ./stack/default.nix { inherit pkgs; };
   nixpkgslegacy2211 = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/refs/tags/22.11.tar.gz") {
     config.permittedInsecurePackages = [
       "nodejs-14.21.1"

@@ -6,7 +6,7 @@
 }:
 let
   envs = (import (builtins.fetchTarball {
-    url = "https://gitlab.kazan.myworldline.com/lroux/ti-local-stack/-/archive/develop/ti-local-stack-develop.tar.gz";
+    url = "https://github.com/loic-roux-404/java-local-stack/-/archive/develop/ti-local-stack-develop.tar.gz";
   }) { inherit pkgs; });
 in (envs.base.overrideAttrs (old: {
   buildInputs = with pkgs; old.buildInputs ++ envs.ti.buildInputs ++ [

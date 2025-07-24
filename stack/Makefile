@@ -243,7 +243,7 @@ install-misc:
 	@keytool -delete -alias replserver -keystore $(HOME)/keystore.jks -storepass password || true
 	@keytool -genkey -alias replserver \
 	  -keyalg RSA -keystore $(HOME)/keystore.jks \
-	  -dname "CN=Bill Smith, OU=Worldline, O=Wln, L=Lyon, S=RHONE, C=FR" \
+	  -dname "CN=Bill Smith, OU=Company, O=Wln, L=Lyon, S=RHONE, C=FR" \
 	  -storepass password -keypass password
 
 define mvn_install_full_cmd

@@ -24,12 +24,12 @@ amazon:
       endpoint: http://localhost:9900
       companyConfigurations:
         default:
-          bucket: worldline
+          bucket: bucket
           credentials:
             AWSAccessKeyId: testClientKey
             AWSSecretKey: testClientSecret
-        'worldline':
-          bucket: worldline
+        'bucket':
+          bucket: bucket
           credentials:
             AWSAccessKeyId: testClientKey
             AWSSecretKey: testClientSecret

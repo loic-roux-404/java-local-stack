@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-COMPANIES=${COMPANIES:-worldline}
+COMPANIES=${COMPANIES:-compqny}
 
 mc config host add minio-cloud --api "${AWS_API_VERSION:-S3v4}" http://minio:9900 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
 

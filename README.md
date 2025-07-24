@@ -201,7 +201,7 @@ If you want to go back to an older version of pictet-local-stack, you can do and
 
 ```nix
   envs = (import (builtins.fetchTarball {
-    url = "https://gitlab.kazan.myworldline.com/W116770/ti-local-stack/-/archive/<commit-hash>/ti-local-stack-<commit-hash>.tar.gz";
+    url = "https://github.com/loic-roux-404/ti-local-stack/-/archive/<commit-hash>/ti-local-stack-<commit-hash>.tar.gz";
   }) { inherit pkgs; });
 ```
 
@@ -528,8 +528,8 @@ make INCLUDE='..*(abc|efg)' log-all-services
 
 Create a personal access token with :
 
-- [For Ingenico](https://gitlab.global.ingenico.com/-/user_settings/personal_access_tokens)
-- [For Kazan](https://gitlab.kazan.myworldline.com/-/user_settings/personal_access_tokens)
+- [For Ingenico](https://github.com/-/user_settings/personal_access_tokens)
+- [For Kazan](https://github.com/-/user_settings/personal_access_tokens)
 
 > The minimum **required scopes** are 'api' and 'write_repository'.
 

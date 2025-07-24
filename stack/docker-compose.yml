@@ -113,6 +113,56 @@ services:
         condition: service_healthy
     profiles: [all, elasticsearch]
 
+  cassandra:
+    container_name: cassandra
+    image: docker.io/bitnami/cassandra:${CASSANDRA_VERSION:-4.1}
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/bitnami
+    environment:
+      CASSANDRA_CLUSTER_NAME: datacenter1
+      CASSANDRA_DATACENTER: datacenter1
+      CASSANDRA_USER: ${CASSANDRA_USER:-cassandra}
+      CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
+      TZ: Europe/Paris
+      JMXDISABLE: true
+      CASSANDRA_SEEDS: cassandra
+      CASSANDRA_PASSWORD_SEEDER: yes
+      JVM_EXTRA_OPTS: -Xms192m -Xmx192m -XX:MaxMetaspaceSize=128m
+      CASSANDRA_CFG_YAML_MATERIALIZED_VIEWS_ENABLED: true
+    healthcheck:
+      test: cqlsh -u ${CASSANDRA_USER:-cassandra} -p ${CASSANDRA_PASSWORD:-cassandra} -e "DESCRIBE KEYSPACES"
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    profiles: [all, cassandra]
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: docker.io/bitnami/cassandra:${CASSANDRA_VERSION:-4.1}
+    user: "1000:0"
+    environment:
+      COMPANIES: ${COMPANIES:-}
+      CASSANDRA_USER: ${CASSANDRA_USER:-cassandra}
+      CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD:-cassandra}
+      CASSANDRA_CONVERSATION_CQL: ${CASSANDRA_CONVERSATION_CQL:-/data/conversation/conversation.cql}
+      CASSANDRA_CUST_CONVERSATION_STANDARD_CQL: ${CASSANDRA_CONVERSATION_CQL:-/data/cust-conversation/conversation_standard.cql}
+      CASSANDRA_CUST_CONVERSATION_CAMPAIGN_CQL: ${CASSANDRA_CONVERSATION_CQL:-/data/cust-conversation/conversation_campaign.cql}
+      CASSANDRA_DEMAND_CQL: ${CASSANDRA_DEMAND_CQL:-/data/demand/demand.cql}
+      CASSANDRA_AUDIT_CQL: ${CASSANDRA_AUDIT_CQL:-/data/audit/audit.cql}
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./.docker-compose/cassandra-load-keyspace/:/run
+      - ./${CONVERSATION_REPO_PREFIX_CQL:-.share/conversation}/src/main/resources/cql:/data/conversation
+      - ./${CUST_CONVERSATION_REPO_PREFIX_CQL:-.share/cust-conversation}/src/main/resources/cql:/data/cust-conversation
+      - ./${DEMAND_REPO_PREFIX_CQL:-.share/demand}/src/main/resources/cql:/data/demand
+      - ./${AUDIT_REPO_PREFIX_CQL:-.share/audit}/src/main/resources/cql:/data/audit
+    entrypoint: /run/init.sh
+    profiles: [all, cassandra]
+
   minio:
     container_name: minio
     image: "minio/minio:${MINIO_TAG:-RELEASE.2024-07-10T18-41-49Z}"
@@ -155,12 +205,101 @@ services:
     profiles: [all, minio]
     entrypoint: /run/s3-init.sh
 
+  apisix:
+    container_name: apisix
+    build:
+      context: ${APISIX_BUILD_CONTEXT:-apisix}
+    volumes:
+      - ./${APISIX_ADV_ROUTES_YAML:-ti-service-apisix/conf/apisix-adv.yaml}:/apisix-config/apisix-adv.yaml
+      - ./${APISIX_ADV_CONFIG_YAML:-.share/apisix/config.yaml}:/apisix-config/config-adv.yaml
+    ports:
+      - "9090:9090"
+      - "8000:8000"
+    environment:
+      APISIX_STAND_ALONE: true
+      MODE: ${APISIX_MODE:-}
+      TYPE: adv
+      JWT_SECRET: ${JWT_SECRET:-secret}
+    profiles: [apisix-adv, apisix-all]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  apisix-cust:
+    container_name: apisix-cust
+    build:
+      context: ${APISIX_BUILD_CONTEXT:-apisix}
+    volumes:
+      - ./${APISIX_CUST_ROUTES_YAML:-ti-service-apisix/conf/apisix-cust.yaml}:/apisix-config/apisix-cust.yaml
+      - ./${APISIX_CUST_CONFIG_YAML:-.share/apisix/config.yaml}:/apisix-config/config-cust.yaml
+    ports:
+      - "9095:9090"
+      - "8250:8000"
+    environment:
+      APISIX_STAND_ALONE: true
+      MODE: ${APISIX_MODE:-}
+      TYPE: cust
+      JWT_SECRET: ${JWT_SECRET:-secret}
+    profiles: [apisix-cust, apisix-all]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  rsyslog:
+    container_name: rsyslog
+    image: levonet/rsyslog
+    ports:
+      - "514:514/tcp"
+      - "514:514/udp"
+      - "8514:514/tcp"
+      - "8514:514/udp"
+    volumes:
+      - /etc/rsyslog.d:/etc/rsyslog.d
+      - /tmp/rsyslog-ti:/var/log/syslog
+    profiles: [rsyslog]
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    entrypoint: /mailpit --webhook-url=http://webhook-receive-mail:5000/receive-mail
+    volumes:
+      - mailpit_data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATA_FILE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    profiles: [mail]
+
+  webhook-receive-mail:
+    container_name: webhook-receive-mail
+    environment:
+      LOG_LEVEL: ${MAIL_WEBHOOK_LOG_LEVEl:-20} # https://docs.python.org/3/library/logging.html#logging-levels
+      MAIL_WEBHOOK_HOST: ${MAIL_WEBHOOK_HOST:-host.docker.internal}
+      MAIL_WEBHOOK_COMPANY: ${MAIL_WEBHOOK_COMPANY:-worldline}
+      MAIL_WEBHOOK_USER_PASSWORD: ${MAIL_WEBHOOK_USER_PASSWORD:-test}
+      MAIL_WEBHOOK_USER_ID: ${MAIL_WEBHOOK_USER_ID:-adminWL}
+      MAIL_WEBHOOK_ROUTING_PORT: ${MAIL_WEBHOOK_ROUTING_PORT:-8001}
+      MAIL_WEBHOOK_ROUTING_ENDPOINT: ${MAIL_WEBHOOK_ROUTING_ENDPOINT:-/routing/mail}
+    build:
+      context: ./.docker-compose/webhook-receive-mail
+    ports:
+      - "5000:5000"
+    profiles: [mail]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 volumes:
   mysql_data:
+    driver: local
+  cassandra_data:
     driver: local
   elasticsearch_data:
     driver: local
   kafka_data:
+    driver: local
+  mailpit_data:
     driver: local
   minio_data:
     driver: local
